@@ -1,0 +1,548 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;background:transparent;}
+
+.device-frame{
+  width:340px;margin:0 auto;
+  background:#FFF0EB;
+  border-radius:36px;
+  border:1.5px solid #e0cfc8;
+  overflow:hidden;
+  min-height:640px;
+  position:relative;
+}
+.status-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 20px 4px;
+  font-size:12px;font-weight:500;color:#1A1A1A;
+}
+.status-icons{display:flex;gap:4px;align-items:center;font-size:11px;}
+.nav-bar{
+  display:flex;align-items:center;justify-content:center;
+  padding:6px 16px 8px;position:relative;
+}
+.nav-back{
+  position:absolute;left:16px;
+  width:28px;height:28px;border-radius:50%;
+  background:#fff;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;color:#1A1A1A;
+}
+.nav-title{font-size:15px;font-weight:500;color:#1A1A1A;}
+.nav-mascot{position:absolute;right:16px;width:28px;height:28px;}
+
+.screen{display:none;flex-direction:column;padding:0 16px 20px;min-height:560px;}
+.screen.active{display:flex;}
+
+.step-row{display:flex;align-items:center;justify-content:center;gap:0;margin:8px 0 16px;}
+.step-dot{
+  width:22px;height:22px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:500;flex-shrink:0;
+}
+.step-dot.done{background:#E85510;color:#fff;}
+.step-dot.active{background:#E85510;color:#fff;outline:3px solid #F5C4A8;outline-offset:1px;}
+.step-dot.pending{background:#E8D5CE;color:#B08070;}
+.step-line{flex:1;height:2px;max-width:32px;}
+.step-line.done{background:#E85510;}
+.step-line.pending{background:#E8D5CE;}
+
+.section-head{font-size:13px;font-weight:500;color:#1A1A1A;margin-bottom:12px;}
+.card{background:#fff;border-radius:14px;padding:14px;margin-bottom:12px;}
+
+.opt{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 12px;border-radius:10px;
+  border:1.5px solid #EDD8D0;
+  background:#fff;margin-bottom:8px;cursor:pointer;
+  transition:all .12s;
+}
+.opt.sel{background:#FFF0EB;border-color:#E85510;}
+.opt-circle{width:18px;height:18px;border-radius:50%;border:1.5px solid #E8D5CE;flex-shrink:0;}
+.opt.sel .opt-circle{background:#E85510;border-color:#E85510;position:relative;}
+.opt.sel .opt-circle::after{
+  content:'';position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:7px;height:7px;border-radius:50%;background:#fff;
+}
+.opt-text{font-size:13px;color:#1A1A1A;}
+.opt-sub{font-size:11px;color:#888;margin-top:1px;}
+.opt.sel .opt-text{color:#E85510;font-weight:500;}
+
+.cta{
+  width:100%;padding:14px;
+  background:#E85510;color:#fff;
+  border-radius:50px;font-size:15px;font-weight:500;
+  border:none;cursor:pointer;
+  font-family:inherit;margin-top:auto;
+}
+.cta:active{background:#C44000;}
+.cta-ghost{
+  width:100%;padding:13px;
+  background:transparent;color:#E85510;
+  border-radius:50px;font-size:14px;font-weight:500;
+  border:1.5px solid #E85510;cursor:pointer;
+  font-family:inherit;margin-top:8px;
+}
+.cta-ghost.gray{color:#888;border-color:#D0D0D0;}
+
+.field{
+  background:#F5EFEC;border-radius:10px;
+  padding:12px 14px;margin-bottom:8px;
+  font-size:13px;color:#BBB;
+}
+.field.filled{color:#1A1A1A;}
+
+.lang-chip{
+  display:inline-flex;align-items:center;gap:5px;
+  background:#fff;border-radius:999px;
+  padding:4px 10px;font-size:11px;color:#888;
+  border:1px solid #EDD8D0;margin-bottom:10px;
+}
+.note{font-size:11px;color:#999;text-align:center;margin-top:8px;line-height:1.5;}
+
+.amount-hero{text-align:center;margin:4px 0 10px;}
+.amount-big{font-size:28px;font-weight:600;color:#E85510;}
+.amount-label{font-size:11px;color:#888;margin-top:2px;}
+
+.slider-wrap{padding:0 2px;margin-bottom:4px;}
+input[type=range]{
+  width:100%;height:4px;
+  -webkit-appearance:none;
+  background:linear-gradient(to right,#E85510 0%,#E85510 50%,#EDD8D0 50%,#EDD8D0 100%);
+  border-radius:2px;outline:none;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;
+  border-radius:50%;background:#E85510;
+  border:2.5px solid #fff;box-shadow:0 1px 4px rgba(232,85,16,.35);
+  cursor:pointer;
+}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:#BBB;margin-bottom:10px;}
+
+.period-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;}
+.period-btn{
+  padding:8px 0;font-size:12px;font-weight:500;
+  border-radius:8px;border:1.5px solid #EDD8D0;
+  background:#fff;color:#888;cursor:pointer;
+  font-family:inherit;text-align:center;transition:all .12s;
+}
+.period-btn.active{background:#FFF0EB;color:#E85510;border-color:#E85510;}
+
+.result-card{background:#FFF8F5;border:1.5px solid #F5C4A8;border-radius:14px;padding:14px;margin-bottom:10px;}
+.result-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;}
+.result-row+.result-row{border-top:1px solid #F5E8E2;}
+.result-key{font-size:12px;color:#888;}
+.result-val{font-size:13px;font-weight:500;color:#1A1A1A;}
+.result-val.big{font-size:18px;color:#E85510;}
+.result-val.green{color:#00A86B;}
+.result-val.red{color:#E83A30;}
+
+.ratio-bar-wrap{height:6px;background:#F5EFEC;border-radius:3px;overflow:hidden;margin:8px 0 4px;}
+.ratio-fill{height:100%;background:#E85510;border-radius:3px;transition:width .3s;}
+.ratio-labels{display:flex;justify-content:space-between;font-size:10px;color:#BBB;}
+
+.warn-box{background:#FFF8EE;border:1px solid #F5C46A;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#854F0B;line-height:1.5;}
+.success-box{background:#F0FBF5;border:1px solid #9FE1CB;border-radius:10px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:#085041;line-height:1.5;}
+
+.mascot-big{text-align:center;padding:16px 0 8px;}
+.mascot-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:#E85510;margin:0 auto 10px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+.mascot-face{
+  width:52px;height:52px;border-radius:50%;
+  background:#fff;position:relative;display:flex;align-items:center;justify-content:center;
+}
+
+.pass-header{background:#E85510;border-radius:14px;padding:16px;text-align:center;margin-bottom:10px;}
+.pass-title{font-size:18px;font-weight:600;color:#fff;margin-bottom:2px;}
+.pass-sub{font-size:12px;color:#FFCDB5;}
+
+.fail-header{background:#F5EFEC;border-radius:14px;padding:14px;text-align:center;margin-bottom:10px;border:1px solid #EDD8D0;}
+.check-item{display:flex;align-items:center;gap:8px;padding:6px 0;}
+.check-item+.check-item{border-top:1px solid #F5EFEC;}
+.check-icon{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.check-ok{background:#E8F7F0;color:#00A86B;}
+.check-no{background:#FDE8E8;color:#E83A30;}
+.check-text{font-size:12px;color:#1A1A1A;}
+
+.remind-card{background:#FFF0EB;border-radius:14px;padding:14px;margin-bottom:10px;border:1px solid #F5C4A8;}
+.remind-title{font-size:13px;font-weight:500;color:#E85510;margin-bottom:4px;}
+.remind-sub{font-size:12px;color:#993C1D;line-height:1.5;}
+
+.prog-bar-thin{height:3px;background:#EDD8D0;border-radius:2px;margin-bottom:12px;overflow:hidden;}
+.prog-thin-fill{height:100%;background:#E85510;border-radius:2px;transition:width .3s;}
+
+.screen-nav{display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;margin-top:auto;}
+.dot-nav{display:flex;gap:5px;justify-content:center;margin-top:10px;}
+.dot-n{width:6px;height:6px;border-radius:50%;background:#EDD8D0;cursor:pointer;}
+.dot-n.act{background:#E85510;width:16px;border-radius:3px;}
+</style>
+
+<div style="padding:1rem 0;display:flex;flex-direction:column;align-items:center;">
+
+<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;" id="topnav">
+  <button onclick="go(0)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #EDD8D0;background:#FFF0EB;color:#E85510;cursor:pointer;font-family:inherit;">入口</button>
+  <button onclick="go(1)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">Q1 在台時間</button>
+  <button onclick="go(2)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">Q2 薪資</button>
+  <button onclick="go(3)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">試算</button>
+  <button onclick="go(4)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">Q3 職類</button>
+  <button onclick="go(5)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">通過</button>
+  <button onclick="go(6)" style="font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid #E0E0E0;background:#fff;color:#888;cursor:pointer;font-family:inherit;">未通過</button>
+</div>
+
+<div class="device-frame" id="device">
+
+  <div class="status-bar">
+    <span>9:41</span>
+    <div class="status-icons">
+      <svg width="16" height="11" viewBox="0 0 16 11" fill="none"><rect x="0" y="4" width="3" height="7" rx="1" fill="#1A1A1A"/><rect x="4.5" y="2.5" width="3" height="8.5" rx="1" fill="#1A1A1A"/><rect x="9" y="0.5" width="3" height="10.5" rx="1" fill="#1A1A1A"/><rect x="13.5" y="0.5" width="2.5" height="10.5" rx="1" fill="#D0D0D0"/></svg>
+      <svg width="15" height="11" viewBox="0 0 15 11" fill="#1A1A1A"><path d="M7.5 2.2C5.1 2.2 2.9 3.1 1.2 4.6L0 3.4C2.1 1.5 4.7 0.3 7.5 0.3s5.4 1.2 7.5 3.1L13.8 4.6C12.1 3.1 9.9 2.2 7.5 2.2z"/><path d="M7.5 5.5C5.9 5.5 4.5 6.1 3.4 7L2.2 5.8C3.7 4.6 5.5 3.8 7.5 3.8s3.8.8 5.3 2L11.6 7C10.5 6.1 9.1 5.5 7.5 5.5z"/><circle cx="7.5" cy="9.5" r="1.5"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#1A1A1A" stroke-opacity=".35" fill="none"/><rect x="22" y="3.5" width="2.5" height="5" rx="1.25" fill="#1A1A1A" fill-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1A1A1A"/></svg>
+    </div>
+  </div>
+
+  <div class="nav-bar" id="navbar">
+    <button class="nav-back" onclick="goBack()" id="backBtn">‹</button>
+    <span class="nav-title" id="navTitle">貸款資格查詢</span>
+    <div style="width:28px;height:28px;background:#E85510;border-radius:50%;display:flex;align-items:center;justify-content:center;">
+      <svg width="16" height="16" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="8" rx="5" ry="5.5" fill="#fff" fill-opacity=".9"/><ellipse cx="7" cy="7" rx="1.2" ry="1.5" fill="#E85510"/><ellipse cx="13" cy="7" rx="1.2" ry="1.5" fill="#E85510"/><ellipse cx="10" cy="10" rx="2" ry="1.2" fill="#E85510" fill-opacity=".6"/><ellipse cx="10" cy="16" rx="5" ry="3" fill="#fff" fill-opacity=".5"/></svg>
+    </div>
+  </div>
+
+  <div class="screen active" id="s0">
+    <div class="mascot-big">
+      <div class="mascot-icon">
+        <div class="mascot-face">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+            <ellipse cx="18" cy="18" rx="14" ry="15" fill="#fff"/>
+            <ellipse cx="12" cy="15" rx="2.5" ry="3" fill="#E85510"/>
+            <ellipse cx="24" cy="15" rx="2.5" ry="3" fill="#E85510"/>
+            <ellipse cx="18" cy="22" rx="4" ry="2.5" fill="#E85510" fill-opacity=".5"/>
+            <ellipse cx="18" cy="8" rx="3" ry="1.5" fill="#1A1A1A"/>
+          </svg>
+        </div>
+      </div>
+      <div style="font-size:16px;font-weight:600;color:#1A1A1A;margin-bottom:4px;">在台工作就能貸款</div>
+      <div style="font-size:12px;color:#888;line-height:1.5;">不需本地保人・3 分鐘查詢資格<br>由玉山銀行提供正規金融服務</div>
+    </div>
+
+    <div class="card" style="margin-bottom:10px;">
+      <div style="font-size:12px;color:#888;margin-bottom:10px;">貸款特色</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:#FFF0EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="#E85510"><path d="M10 2L12.5 7.5H18L13.5 11L15.5 17L10 13.5L4.5 17L6.5 11L2 7.5H7.5L10 2Z"/></svg>
+          </div>
+          <div><div style="font-size:13px;font-weight:500;color:#1A1A1A;">最高 NT$150,000</div><div style="font-size:11px;color:#888;">依審核結果核定</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:#FFF0EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#E85510" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 3"/></svg>
+          </div>
+          <div><div style="font-size:13px;font-weight:500;color:#1A1A1A;">最快 2 個工作天撥款</div><div style="font-size:11px;color:#888;">撥入您的電支帳戶</div></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div style="width:32px;height:32px;border-radius:8px;background:#FFF0EB;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="#E85510" stroke-width="1.5"><path d="M4 10h12M10 4v12"/><rect x="3" y="3" width="14" height="14" rx="3"/></svg>
+          </div>
+          <div><div style="font-size:13px;font-weight:500;color:#1A1A1A;">越南文 ／ 印尼文 ／ 泰文</div><div style="font-size:11px;color:#888;">全程母語服務</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note" style="margin-bottom:12px;">不影響信用紀錄・資料加密保護</div>
+    <button class="cta" onclick="go(1)">查看我的貸款資格 →</button>
+  </div>
+
+  <div class="screen" id="s1">
+    <div class="prog-bar-thin"><div class="prog-thin-fill" style="width:20%"></div></div>
+    <div class="step-row">
+      <div class="step-dot active">1</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">2</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">3</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">4</div>
+    </div>
+    <div class="lang-chip">🇻🇳 Tiếng Việt ／ 繁體中文</div>
+    <div class="section-head">Bạn đã làm việc tại Đài Loan bao lâu?<br><span style="font-size:12px;font-weight:400;color:#888;">您在台灣工作多久了？</span></div>
+    <div class="opt sel" onclick="selOpt(this,'q1')">
+      <div class="opt-circle"></div>
+      <div><div class="opt-text">3–6 tháng（3–6 個月）</div></div>
+    </div>
+    <div class="opt" onclick="selOpt(this,'q1')">
+      <div class="opt-circle"></div>
+      <div><div class="opt-text">6–12 tháng（6–12 個月）</div></div>
+    </div>
+    <div class="opt" onclick="selOpt(this,'q1')">
+      <div class="opt-circle"></div>
+      <div><div class="opt-text">Trên 1 năm（1 年以上）</div></div>
+    </div>
+    <div class="opt" onclick="selOpt(this,'q1')" style="border-color:#F5C4A8;background:#FFFAF8;" id="q1-lt3">
+      <div class="opt-circle" style="border-color:#F5C4A8;"></div>
+      <div><div class="opt-text" style="color:#888;">Dưới 3 tháng（未滿 3 個月）</div><div class="opt-sub" style="color:#E85510;">暫不符合，可先了解條件</div></div>
+    </div>
+    <div style="margin-top:auto;padding-top:10px;">
+      <button class="cta" onclick="go(2)">Tiếp theo 下一題 →</button>
+      <div class="note">共 4 題・不留存個人資料</div>
+    </div>
+  </div>
+
+  <div class="screen" id="s2">
+    <div class="prog-bar-thin"><div class="prog-thin-fill" style="width:50%"></div></div>
+    <div class="step-row">
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot active">2</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">3</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">4</div>
+    </div>
+    <div class="lang-chip">🇻🇳 Tiếng Việt ／ 繁體中文</div>
+    <div class="section-head">Mức lương hàng tháng của bạn?<br><span style="font-size:12px;font-weight:400;color:#888;">您的每月薪資（含加班費）</span></div>
+    <div class="opt" onclick="selOpt(this,'q2')"><div class="opt-circle"></div><div><div class="opt-text">Dưới NT$26,400（基本薪資以下）</div></div></div>
+    <div class="opt sel" onclick="selOpt(this,'q2')">
+      <div class="opt-circle"></div>
+      <div>
+        <div class="opt-text">NT$26,400 – 35,000</div>
+        <div class="opt-sub" style="color:#E85510;">預估可借 NT$30,000–60,000</div>
+      </div>
+    </div>
+    <div class="opt" onclick="selOpt(this,'q2')"><div class="opt-circle"></div><div><div class="opt-text">NT$35,000 – 50,000</div><div class="opt-sub" id="est2">預估可借 NT$50,000–100,000</div></div></div>
+    <div class="opt" onclick="selOpt(this,'q2')"><div class="opt-circle"></div><div><div class="opt-text">NT$50,000 以上</div><div class="opt-sub">預估可借 NT$100,000–150,000</div></div></div>
+    <div style="margin-top:auto;padding-top:10px;">
+      <button class="cta" onclick="go(3)">Tiếp theo 下一題 →</button>
+      <button class="cta-ghost gray" onclick="go(1)">← Quay lại 上一題</button>
+    </div>
+  </div>
+
+  <div class="screen" id="s3">
+    <div class="prog-bar-thin"><div class="prog-thin-fill" style="width:70%"></div></div>
+    <div class="step-row">
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot active">3</div>
+      <div class="step-line pending"></div>
+      <div class="step-dot pending">4</div>
+    </div>
+    <div style="font-size:14px;font-weight:500;color:#1A1A1A;margin-bottom:2px;">試算每月還款金額</div>
+    <div style="font-size:11px;color:#888;margin-bottom:12px;">Thử tính số tiền trả hàng tháng</div>
+
+    <div class="amount-hero">
+      <div class="amount-big" id="amt-disp">NT$60,000</div>
+      <div class="amount-label">借款金額</div>
+    </div>
+    <div class="slider-wrap">
+      <input type="range" id="calc-slider" min="10000" max="150000" step="5000" value="60000" oninput="doCalc()">
+    </div>
+    <div class="range-labels"><span>NT$10,000</span><span>NT$150,000</span></div>
+
+    <div style="font-size:12px;color:#888;margin-bottom:6px;">還款期數</div>
+    <div class="period-grid">
+      <button class="period-btn" onclick="setPer(6,this)">6 期</button>
+      <button class="period-btn active" onclick="setPer(12,this)">12 期</button>
+      <button class="period-btn" onclick="setPer(24,this)">24 期</button>
+      <button class="period-btn" onclick="setPer(36,this)">36 期</button>
+    </div>
+
+    <div class="result-card">
+      <div class="result-row">
+        <span class="result-key">每月還款</span>
+        <span class="result-val big" id="r-monthly">NT$5,183</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">約佔月薪</span>
+        <span class="result-val" id="r-ratio" style="color:#00A86B;">16%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">總利息</span>
+        <span class="result-val" id="r-int">NT$2,196</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">總還款金額</span>
+        <span class="result-val" id="r-total">NT$62,196</span>
+      </div>
+      <div class="ratio-bar-wrap" style="margin-top:8px;">
+        <div class="ratio-fill" id="r-bar" style="width:97%"></div>
+      </div>
+      <div class="ratio-labels"><span id="r-plabel">本金 97%</span><span id="r-ilabel">利息 3%</span></div>
+    </div>
+    <div id="calc-warn" style="display:none;" class="warn-box">月還款超過薪資 30%，建議縮減金額或延長期數</div>
+    <button class="cta" onclick="go(4)">用這個方案繼續 →</button>
+    <button class="cta-ghost gray" onclick="go(2)">← 上一題</button>
+  </div>
+
+  <div class="screen" id="s4">
+    <div class="prog-bar-thin"><div class="prog-thin-fill" style="width:85%"></div></div>
+    <div class="step-row">
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot done"><svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="step-line done"></div>
+      <div class="step-dot active">4</div>
+    </div>
+    <div class="lang-chip">🇻🇳 Tiếng Việt ／ 繁體中文</div>
+    <div class="section-head">Bạn đang làm loại công việc gì?<br><span style="font-size:12px;font-weight:400;color:#888;">您目前的工作類型</span></div>
+    <div class="opt sel" onclick="selOpt(this,'q4')"><div class="opt-circle"></div><div><div class="opt-text">Sản xuất 製造業 ／ 工廠</div></div></div>
+    <div class="opt" onclick="selOpt(this,'q4')"><div class="opt-circle"></div><div><div class="opt-text">Chăm sóc 看護 ／ 照護</div></div></div>
+    <div class="opt" onclick="selOpt(this,'q4')"><div class="opt-circle"></div><div><div class="opt-text">Ngư nghiệp 漁業</div></div></div>
+    <div class="opt" onclick="selOpt(this,'q4')"><div class="opt-circle"></div><div><div class="opt-text">Khác 其他</div></div></div>
+    <div style="margin-top:auto;padding-top:10px;">
+      <button class="cta" onclick="go(5)">查看結果 Xem kết quả →</button>
+      <button class="cta-ghost gray" onclick="go(3)">← 上一題</button>
+      <div class="note">此題不影響申請資格</div>
+    </div>
+  </div>
+
+  <div class="screen" id="s5">
+    <div class="pass-header">
+      <div style="font-size:22px;margin-bottom:4px;">🎉</div>
+      <div class="pass-title">初步符合申請資格！</div>
+      <div class="pass-sub">Bạn đủ điều kiện sơ bộ</div>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <div style="font-size:12px;color:#888;margin-bottom:10px;">您的預估貸款方案</div>
+      <div class="result-row">
+        <span class="result-key">預估可借金額</span>
+        <span class="result-val" style="color:#E85510;font-size:15px;">NT$30,000–80,000</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">參考年利率</span>
+        <span class="result-val">約 6–9%</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">您選擇的期數</span>
+        <span class="result-val">12 期</span>
+      </div>
+      <div class="result-row">
+        <span class="result-key">預估每月還款</span>
+        <span class="result-val green">約 NT$5,200–7,000</span>
+      </div>
+    </div>
+    <div class="success-box">正式核准金額與利率，由玉山銀行審核後確認。</div>
+    <div style="font-size:11px;color:#888;text-align:center;margin-bottom:12px;">約需 10 分鐘完成申請</div>
+    <button class="cta" onclick="sendPrompt('請幫我設計申請表頁面（帳號靜默建立流程）')">開始申請 Bắt đầu đăng ký →</button>
+    <button class="cta-ghost" style="margin-top:8px;color:#888;border-color:#D0D0D0;font-size:13px;" onclick="go(0)">先了解更多功能</button>
+  </div>
+
+  <div class="screen" id="s6">
+    <div class="fail-header">
+      <div style="font-size:20px;margin-bottom:6px;">📋</div>
+      <div style="font-size:15px;font-weight:500;color:#1A1A1A;margin-bottom:2px;">目前條件尚未達到</div>
+      <div style="font-size:12px;color:#888;">Chưa đủ điều kiện lần này</div>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <div style="font-size:12px;color:#888;margin-bottom:8px;">條件說明</div>
+      <div class="check-item">
+        <div class="check-icon check-no">✕</div>
+        <div class="check-text">在台工作未滿 3 個月（目前條件需滿 3 個月）</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon check-ok">✓</div>
+        <div class="check-text">薪資條件符合</div>
+      </div>
+      <div class="check-item">
+        <div class="check-icon check-ok">✓</div>
+        <div class="check-text">國籍條件符合</div>
+      </div>
+    </div>
+    <div class="remind-card">
+      <div class="remind-title">再等 2 個月就可以申請了</div>
+      <div class="remind-sub">到時我們會用 LINE 通知您，一鍵就能開始申請！</div>
+    </div>
+    <button class="cta" style="background:#E85510;">到時提醒我 預約通知 →</button>
+    <button class="cta-ghost gray" style="margin-top:8px;" onclick="go(0)">繼續使用其他功能</button>
+    <div class="note" style="margin-top:8px;">預約後不會有任何費用或義務</div>
+  </div>
+
+</div>
+
+<div class="dot-nav" id="dotnav">
+  <div class="dot-n act" onclick="go(0)"></div>
+  <div class="dot-n" onclick="go(1)"></div>
+  <div class="dot-n" onclick="go(2)"></div>
+  <div class="dot-n" onclick="go(3)"></div>
+  <div class="dot-n" onclick="go(4)"></div>
+  <div class="dot-n" onclick="go(5)"></div>
+  <div class="dot-n" onclick="go(6)"></div>
+</div>
+
+</div>
+
+<script>
+let cur=0;
+let calcPeriod=12;
+const titles=['貸款資格查詢','在台工作時間','月薪範圍','貸款試算','工作類型','查詢結果','查詢結果'];
+
+function go(i){
+  document.querySelectorAll('.screen').forEach((s,j)=>s.classList.toggle('active',j===i));
+  document.querySelectorAll('#dotnav .dot-n').forEach((d,j)=>{d.classList.toggle('act',j===i);});
+  const btns=document.querySelectorAll('#topnav button');
+  btns.forEach((b,j)=>{
+    b.style.background=j===i?'#FFF0EB':'#fff';
+    b.style.color=j===i?'#E85510':'#888';
+    b.style.borderColor=j===i?'#EDD8D0':'#E0E0E0';
+  });
+  document.getElementById('navTitle').textContent=titles[i]||'貸款資格查詢';
+  document.getElementById('backBtn').style.display=i===0?'none':'flex';
+  cur=i;
+  updateSliderBg();
+}
+
+function goBack(){if(cur>0)go(cur-1);}
+
+function selOpt(el,group){
+  el.closest('.screen').querySelectorAll('.opt').forEach(o=>o.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+function fmt(n){return 'NT$'+Math.round(n).toLocaleString();}
+function doCalc(){
+  const amt=parseInt(document.getElementById('calc-slider').value);
+  document.getElementById('amt-disp').textContent=fmt(amt);
+  const r=0.0688/12;
+  const n=calcPeriod;
+  const m=amt*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+  const total=m*n;
+  const interest=total-amt;
+  const avgSal=32000;
+  const ratioNum=Math.round((m/avgSal)*100);
+  document.getElementById('r-monthly').textContent=fmt(m);
+  document.getElementById('r-int').textContent=fmt(interest);
+  document.getElementById('r-total').textContent=fmt(total);
+  const el=document.getElementById('r-ratio');
+  el.textContent=ratioNum+'%';
+  el.style.color=ratioNum>30?'#E83A30':ratioNum>20?'#854F0B':'#00A86B';
+  const pct=Math.round((amt/total)*100);
+  document.getElementById('r-bar').style.width=pct+'%';
+  document.getElementById('r-plabel').textContent='本金 '+pct+'%';
+  document.getElementById('r-ilabel').textContent='利息 '+(100-pct)+'%';
+  document.getElementById('calc-warn').style.display=ratioNum>30?'block':'none';
+  updateSliderBg();
+}
+function setPer(p,el){
+  calcPeriod=p;
+  document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  doCalc();
+}
+function updateSliderBg(){
+  const s=document.getElementById('calc-slider');
+  if(!s)return;
+  const min=parseInt(s.min),max=parseInt(s.max),val=parseInt(s.value);
+  const pct=Math.round((val-min)/(max-min)*100);
+  s.style.background=`linear-gradient(to right,#E85510 0%,#E85510 ${pct}%,#EDD8D0 ${pct}%,#EDD8D0 100%)`;
+}
+go(0);
+</script>
