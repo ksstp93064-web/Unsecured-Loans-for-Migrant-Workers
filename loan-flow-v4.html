@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>全盈+PAY 信用貸款申請</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --org:#E85510;--org-lt:#FFF5F0;--org-md:#FFCBA4;--org-dk:#C44000;
+  --grn:#2DB87A;--grn-lt:#E8F7F0;--grn-dk:#085041;
+  --red:#FF4757;--navy:#1E3A5F;--navy-lt:#EAF0F8;
+  --amb-lt:#FFF8E1;
+  --txt:#1A1A1A;--sub:#888;--hint:#BBB;
+  --card:#FFF;--bg:#FFF5F0;--inp:#F5F0EE;--bdr:#F0E8E4;
+}
+html,body{font-family:'Noto Sans TC',-apple-system,BlinkMacSystemFont,sans-serif;background:#E8DDD8;}
+
+/* ── Phone ─────────────────────────────────────────────────────── */
+.phone{
+  width:390px;min-height:844px;background:var(--bg);
+  margin:20px auto;border-radius:48px;
+  box-shadow:0 30px 80px rgba(0,0,0,.22),0 0 0 10px #1A1A1A,0 0 0 11px #333;
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#1A1A1A;border-radius:0 0 20px 20px;z-index:200;}
+
+/* ── Status bar ──────────────────────────────────────────────── */
+.status{padding:14px 22px 4px;display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--txt);}
+.status-r{display:flex;align-items:center;gap:5px;}
+
+/* ── Navbar ──────────────────────────────────────────────────── */
+.navbar{padding:2px 18px 8px;display:flex;align-items:center;justify-content:space-between;}
+.bk{width:34px;height:34px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);border:none;cursor:pointer;font-size:18px;color:var(--txt);}
+.nt{font-size:17px;font-weight:700;color:var(--txt);}
+.logo-orb{width:34px;height:34px;background:var(--org);border-radius:50%;display:flex;align-items:center;justify-content:center;}
+
+/* ── Step bar ────────────────────────────────────────────────── */
+.step-bar{padding:0 20px 10px;display:flex;align-items:center;}
+.step-node{display:flex;flex-direction:column;align-items:center;flex:1;}
+.step-c{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.step-c.done{background:var(--org);color:#fff;}
+.step-c.active{background:var(--org);color:#fff;box-shadow:0 0 0 4px var(--org-md);}
+.step-c.pending{background:var(--inp);color:var(--hint);border:1.5px solid var(--bdr);}
+.step-lbl{font-size:9px;color:var(--hint);margin-top:3px;text-align:center;}
+.step-lbl.active{color:var(--org);font-weight:700;}
+.step-line{flex:1;height:2px;margin-top:-13px;}
+.step-line.done{background:var(--org);}
+.step-line.pending{background:var(--bdr);}
+
+/* ── Scroll ──────────────────────────────────────────────────── */
+.scroll{flex:1;overflow-y:auto;padding:0 14px 96px;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+
+/* ── Lang pills ──────────────────────────────────────────────── */
+.lang-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;}
+.lp{padding:4px 10px;border-radius:999px;border:1.5px solid var(--bdr);background:var(--card);font-size:11px;font-weight:500;color:var(--sub);cursor:pointer;transition:all .15s;}
+.lp.act{background:var(--org);border-color:var(--org);color:#fff;}
+
+/* ── Banner ──────────────────────────────────────────────────── */
+.banner{background:linear-gradient(135deg,var(--org),#FF8C42);border-radius:18px;padding:14px 16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.banner::before{content:'';position:absolute;right:-20px;top:-20px;width:110px;height:110px;background:rgba(255,255,255,.1);border-radius:50%;}
+.b-tag{background:rgba(255,255,255,.25);border-radius:999px;padding:2px 9px;font-size:10px;font-weight:700;color:#fff;display:inline-block;margin-bottom:5px;}
+.b-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:2px;}
+.b-sub{font-size:10px;color:rgba(255,255,255,.8);}
+.b-mascot{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:34px;}
+
+/* ── Feature card ────────────────────────────────────────────── */
+.feat-card{
+  background:var(--card);border-radius:18px;
+  padding:14px 14px 10px;margin-bottom:10px;
+  box-shadow:0 2px 10px rgba(232,85,16,.08);
+}
+.feat-card-title{
+  font-size:11px;font-weight:700;color:var(--sub);
+  margin-bottom:12px;display:flex;align-items:center;gap:5px;
+}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.feat-item{
+  background:var(--bg);border-radius:12px;
+  padding:10px 6px 8px;text-align:center;
+  border:1px solid var(--bdr);
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.feat-ico{
+  width:36px;height:36px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;margin-bottom:3px;flex-shrink:0;
+}
+.feat-title{font-size:10px;font-weight:700;color:var(--txt);line-height:1.3;text-align:center;}
+.feat-desc{font-size:9px;color:var(--sub);line-height:1.4;text-align:center;}
+/* Color variants */
+.ico-org{background:var(--org-lt);}
+.ico-grn{background:var(--grn-lt);}
+.ico-navy{background:var(--navy-lt);}
+.ico-amb{background:#FFF8E1;}
+
+/* ── White card ──────────────────────────────────────────────── */
+.card{background:var(--card);border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(232,85,16,.08);}
+.card-lbl{font-size:12px;font-weight:700;color:var(--sub);margin-bottom:10px;}
+
+/* ── Amount ──────────────────────────────────────────────────── */
+.amt-wrap{text-align:center;padding:4px 0 6px;}
+.amt-ntd{font-size:11px;color:var(--hint);}
+.amt-num{font-size:32px;font-weight:900;color:var(--org);letter-spacing:-1px;line-height:1.1;}
+.amt-home{display:inline-flex;align-items:center;gap:4px;background:var(--org-lt);border-radius:999px;padding:3px 10px;font-size:11px;color:var(--org);font-weight:500;margin-top:3px;}
+
+/* ── Sliders ─────────────────────────────────────────────────── */
+input[type=range]{width:100%;height:5px;-webkit-appearance:none;border-radius:3px;outline:none;cursor:pointer;margin:6px 0 2px;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--org);border:3px solid #fff;box-shadow:0 2px 8px rgba(232,85,16,.4);}
+.rl{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-bottom:10px;}
+.sl-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;}
+.sl-title{font-size:11px;color:var(--sub);font-weight:500;}
+.sl-val{font-size:13px;font-weight:700;color:var(--org);}
+
+/* ── Period buttons ──────────────────────────────────────────── */
+.per-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:2px;}
+.per-btn{padding:10px 0;border-radius:12px;border:1.5px solid var(--bdr);background:var(--card);font-size:13px;font-weight:700;color:var(--sub);cursor:pointer;font-family:inherit;text-align:center;}
+.per-btn .ps{display:block;font-size:9px;font-weight:400;color:var(--hint);margin-top:1px;}
+.per-btn.act{background:var(--org-lt);border-color:var(--org);color:var(--org);}
+.per-btn.act .ps{color:var(--org-dk);}
+
+/* ── Monthly payment hero ─────────────────────────────────────── */
+.pay-hero{background:var(--org);border-radius:18px;padding:0;margin-bottom:10px;overflow:hidden;box-shadow:0 4px 16px rgba(232,85,16,.3);}
+.ph-top{padding:14px 15px 10px;display:flex;justify-content:space-between;align-items:flex-start;}
+.ph-l{flex:1;}
+.ph-label{font-size:11px;color:rgba(255,255,255,.75);font-weight:500;margin-bottom:3px;}
+.ph-amount{font-size:32px;font-weight:900;color:#fff;letter-spacing:-1px;line-height:1.1;}
+.ph-home{font-size:11px;color:rgba(255,255,255,.65);margin-top:3px;}
+.rate-badge{display:inline-flex;align-items:center;gap:3px;background:rgba(255,255,255,.15);border-radius:999px;padding:4px 10px;margin-top:7px;}
+.rb-txt{font-size:10px;color:rgba(255,255,255,.8);}
+.rb-val{font-size:12px;font-weight:700;color:#fff;}
+.ph-r{text-align:right;}
+.ratio-tag{padding:5px 10px;border-radius:999px;font-size:11px;font-weight:700;}
+.rt-ok{background:rgba(255,255,255,.2);color:#fff;}
+.rt-warn{background:#FEF3C7;color:#854F0B;}
+.rt-bad{background:#FDE8E8;color:#7F1D1D;}
+.ph-strip{background:rgba(0,0,0,.16);padding:10px 15px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:0;}
+.ph-s-item{text-align:center;padding:2px 0;}
+.ph-s-item+.ph-s-item{border-left:1px solid rgba(255,255,255,.15);}
+.ph-s-lbl{font-size:9px;color:rgba(255,255,255,.6);font-weight:500;margin-bottom:2px;}
+.ph-s-val{font-size:13px;font-weight:700;color:#fff;}
+.ph-s-val.hi{color:var(--org-md);font-size:14px;}
+
+/* ── Schedule ────────────────────────────────────────────────── */
+.sched-btn{width:100%;padding:10px;background:var(--card);border:1.5px solid var(--bdr);border-radius:12px;font-size:12px;font-weight:700;color:var(--sub);font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.sched-arrow{display:inline-block;transition:transform .2s;}
+.sched-tbl{display:none;border:1.5px solid var(--bdr);border-radius:12px;overflow:hidden;margin-bottom:6px;}
+.sched-tbl.open{display:block;}
+.st-h{display:grid;grid-template-columns:22px 1fr 1fr 1fr 1fr;background:var(--inp);padding:6px 10px;font-size:9px;font-weight:700;color:var(--sub);}
+.st-r{display:grid;grid-template-columns:22px 1fr 1fr 1fr 1fr;padding:6px 10px;font-size:9px;color:var(--txt);border-top:1px solid var(--bdr);}
+.st-r:nth-child(even){background:var(--org-lt);}
+.st-n{color:var(--hint);font-size:8px;}
+
+/* ── Disclaimer ──────────────────────────────────────────────── */
+.disc{background:var(--amb-lt);border-radius:10px;padding:9px 11px;font-size:10px;color:#633806;line-height:1.65;margin-bottom:10px;border:1px solid #F5C46A;}
+
+/* ── Step 2 options ──────────────────────────────────────────── */
+.q-lbl{font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px;line-height:1.4;}
+.q-sub{font-size:10px;color:var(--hint);margin-bottom:10px;}
+.opt{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border-radius:12px;border:1.5px solid var(--bdr);background:var(--card);margin-bottom:7px;cursor:pointer;}
+.opt.on{background:var(--org-lt);border-color:var(--org);}
+.oc{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--bdr);flex-shrink:0;margin-top:2px;position:relative;}
+.opt.on .oc{background:var(--org);border-color:var(--org);}
+.opt.on .oc::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:#fff;}
+.ot{font-size:12px;color:var(--txt);font-weight:500;}
+.os{font-size:10px;color:var(--sub);margin-top:1px;}
+.opt.on .ot{color:var(--org);}
+.opt.on .os{color:var(--org-dk);}
+
+/* ── Step 3 consent ──────────────────────────────────────────── */
+.consent-hero{background:linear-gradient(135deg,var(--navy),#2A5298);border-radius:18px;padding:16px;margin-bottom:10px;position:relative;overflow:hidden;}
+.consent-hero::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.06);border-radius:50%;}
+.ch-tag{background:rgba(255,255,255,.2);border-radius:999px;padding:3px 9px;font-size:10px;font-weight:700;color:#fff;display:inline-block;margin-bottom:7px;}
+.ch-title{font-size:15px;font-weight:700;color:#fff;margin-bottom:3px;}
+.ch-sub{font-size:10px;color:rgba(255,255,255,.7);line-height:1.5;}
+.data-list{background:var(--navy-lt);border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #B5D4F4;}
+.dl-title{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:7px;}
+.dl-item{display:flex;align-items:flex-start;gap:7px;padding:5px 0;border-top:1px solid rgba(30,58,95,.08);}
+.dl-dot{width:5px;height:5px;border-radius:50%;background:var(--navy);flex-shrink:0;margin-top:7px;}
+.dl-text{font-size:11px;color:var(--navy);line-height:1.5;}
+.dl-tag{display:inline-block;border-radius:999px;padding:1px 7px;font-size:9px;font-weight:700;margin-left:4px;}
+.purpose-box{background:var(--card);border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid var(--bdr);}
+.pb-title{font-size:11px;font-weight:700;color:var(--txt);margin-bottom:6px;}
+.pb-row{display:flex;align-items:flex-start;gap:7px;padding:3px 0;}
+.pb-ico{font-size:13px;flex-shrink:0;}
+.pb-txt{font-size:11px;color:var(--sub);line-height:1.5;}
+.third-box{background:#FFF0F0;border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #FFC0C0;}
+.tb-title{font-size:11px;font-weight:700;color:#7F1D1D;margin-bottom:5px;}
+.tb-body{font-size:11px;color:#7F1D1D;line-height:1.6;}
+.consent-checks{background:var(--card);border-radius:14px;overflow:hidden;margin-bottom:10px;border:1.5px solid var(--org-md);}
+.ck-head{background:var(--org-lt);padding:9px 13px;font-size:11px;font-weight:700;color:var(--org);}
+.ck-item{display:flex;align-items:flex-start;gap:9px;padding:11px 13px;border-top:1px solid var(--bdr);cursor:pointer;}
+.ck-box{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--bdr);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;background:var(--card);}
+.ck-box.checked{background:var(--org);border-color:var(--org);}
+.ck-box.checked::after{content:'✓';font-size:12px;color:#fff;font-weight:700;}
+.ck-text{font-size:11px;color:var(--txt);line-height:1.55;}
+.ck-req{display:inline-block;background:#FDE8E8;color:var(--red);font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:3px;}
+.ck-opt{display:inline-block;background:var(--grn-lt);color:var(--grn-dk);font-size:9px;font-weight:700;padding:1px 6px;border-radius:4px;margin-left:3px;}
+.all-ck-btn{width:100%;padding:10px;background:var(--org-lt);border:1.5px solid var(--org-md);border-radius:12px;font-size:12px;font-weight:700;color:var(--org);font-family:inherit;cursor:pointer;margin-bottom:9px;}
+.legal-note{background:var(--amb-lt);border-radius:10px;padding:9px 11px;font-size:10px;color:#633806;line-height:1.65;margin-bottom:10px;border:1px solid #F5C46A;}
+
+/* ── Step 4 handoff ──────────────────────────────────────────── */
+.hh-anim{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--org),#FF8C42);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-size:28px;animation:hpulse 2s ease-in-out infinite;}
+@keyframes hpulse{0%,100%{box-shadow:0 0 0 0 rgba(232,85,16,.4)}50%{box-shadow:0 0 0 10px rgba(232,85,16,0)}}
+.handoff-card{background:linear-gradient(135deg,var(--navy),#2A5298);border-radius:18px;padding:16px;margin-bottom:10px;}
+.hc-title{font-size:12px;font-weight:700;color:rgba(255,255,255,.7);margin-bottom:9px;}
+.hc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+.hc-row:last-child{border-bottom:none;}
+.hc-k{font-size:11px;color:rgba(255,255,255,.7);}
+.hc-v{font-size:12px;font-weight:700;color:#fff;}
+.transfer-info{background:var(--grn-lt);border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1px solid #9FE1CB;}
+.ti-title{font-size:11px;font-weight:700;color:var(--grn-dk);margin-bottom:7px;}
+.ti-item{display:flex;align-items:flex-start;gap:8px;padding:4px 0;}
+.ti-n{width:17px;height:17px;border-radius:50%;background:var(--org);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.ti-t{font-size:11px;color:var(--grn-dk);line-height:1.5;}
+.safety-box{background:var(--card);border-radius:12px;padding:11px 13px;margin-bottom:10px;border:1.5px solid var(--bdr);display:flex;align-items:flex-start;gap:9px;}
+.sb-ico{font-size:18px;flex-shrink:0;}
+.sb-txt{font-size:11px;color:var(--sub);line-height:1.6;}
+.sb-bold{font-weight:700;color:var(--txt);}
+
+/* ── CTA bar ─────────────────────────────────────────────────── */
+.cta-bar{position:absolute;bottom:0;left:0;right:0;padding:8px 14px 26px;background:linear-gradient(to top,var(--bg) 60%,transparent);}
+.cta{width:100%;padding:14px;background:var(--org);color:#fff;border-radius:16px;font-size:14px;font-weight:700;border:none;font-family:inherit;cursor:pointer;box-shadow:0 4px 14px rgba(232,85,16,.35);display:flex;align-items:center;justify-content:center;gap:9px;}
+.cta:active{transform:scale(.97);}
+.cta:disabled{background:var(--bdr);color:var(--hint);box-shadow:none;cursor:not-allowed;}
+.cta-note{font-size:10px;color:var(--hint);text-align:center;margin-top:5px;}
+</style>
+</head>
+<body>
+<div class="phone">
+<div class="notch"></div>
+
+<div class="status">
+  <span>9:41</span>
+  <div class="status-r">
+    <svg width="15" height="10" viewBox="0 0 16 11"><rect x="0" y="4" width="3" height="7" rx="1" fill="#1A1A1A"/><rect x="4.5" y="2.5" width="3" height="8.5" rx="1" fill="#1A1A1A"/><rect x="9" y=".5" width="3" height="10.5" rx="1" fill="#1A1A1A"/><rect x="13.5" y=".5" width="2.5" height="10.5" rx="1" fill="#CCC"/></svg>
+    <svg width="13" height="10" viewBox="0 0 15 11" fill="#1A1A1A"><path d="M7.5 2.2C5.1 2.2 2.9 3.1 1.2 4.6L0 3.4C2.1 1.5 4.7.3 7.5.3s5.4 1.2 7.5 3.1L13.8 4.6C12.1 3.1 9.9 2.2 7.5 2.2z"/><path d="M7.5 5.5C5.9 5.5 4.5 6.1 3.4 7L2.2 5.8C3.7 4.6 5.5 3.8 7.5 3.8s3.8.8 5.3 2L11.6 7C10.5 6.1 9.1 5.5 7.5 5.5z"/><circle cx="7.5" cy="9.5" r="1.5"/></svg>
+    <svg width="21" height="10" viewBox="0 0 25 12"><rect x=".5" y=".5" width="21" height="11" rx="3.5" stroke="#1A1A1A" stroke-opacity=".35" fill="none"/><rect x="22" y="3.5" width="2.5" height="5" rx="1.25" fill="#1A1A1A" fill-opacity=".4"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#1A1A1A"/></svg>
+  </div>
+</div>
+
+<div class="navbar">
+  <button class="bk" onclick="goBack()">‹</button>
+  <span class="nt" id="nav-title">信用貸款試算</span>
+  <div class="logo-orb">
+    <svg width="15" height="15" viewBox="0 0 20 20" fill="none"><ellipse cx="10" cy="8" rx="5.5" ry="6" fill="#fff" fill-opacity=".9"/><ellipse cx="7" cy="7" rx="1.3" ry="1.6" fill="#E85510"/><ellipse cx="13" cy="7" rx="1.3" ry="1.6" fill="#E85510"/><ellipse cx="10" cy="16.5" rx="5" ry="3" fill="#fff" fill-opacity=".35"/></svg>
+  </div>
+</div>
+
+<div class="step-bar" id="step-bar"></div>
+
+<div class="scroll" id="main-scroll">
+
+<!-- ══ STEP 1 ══════════════════════════════════════════════════ -->
+<div id="step1">
+
+<div class="lang-row">
+  <button class="lp" onclick="setLang('vi')" id="l-vi">🇻🇳 Việt</button>
+  <button class="lp" onclick="setLang('id')" id="l-id">🇮🇩 Indo</button>
+  <button class="lp" onclick="setLang('th')" id="l-th">🇹🇭 ไทย</button>
+  <button class="lp" onclick="setLang('fil')" id="l-fil">🇵🇭 Fil</button>
+  <button class="lp" onclick="setLang('en')" id="l-en">🇺🇸 EN</button>
+  <button class="lp act" onclick="setLang('zh')" id="l-zh">🇹🇼 中文</button>
+</div>
+
+<!-- Banner -->
+<div class="banner">
+  <div class="b-tag" id="b-tag">玉山銀行合作</div>
+  <div class="b-title" id="b-title">在台工作就能申請貸款</div>
+  <div class="b-sub" id="b-sub">不需本地保人・額度 NT$30,000–100,000</div>
+  <div class="b-mascot">🐧</div>
+</div>
+
+<!-- ★ Service Features Card ★ -->
+<div class="feat-card">
+  <div class="feat-card-title" id="feat-title">✨ 服務特色</div>
+  <div class="feat-grid">
+    <div class="feat-item">
+      <div class="feat-ico ico-org">🙅</div>
+      <div class="feat-title" id="f1-t">不需保人</div>
+      <div class="feat-desc" id="f1-d">無需台灣本地保人，在台工作即可申請</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico ico-grn">⚡</div>
+      <div class="feat-title" id="f2-t">快速撥款</div>
+      <div class="feat-desc" id="f2-d">審核通過最快 2 個工作天直接入帳</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico ico-navy">🌐</div>
+      <div class="feat-title" id="f3-t">母語服務</div>
+      <div class="feat-desc" id="f3-d">越南文・印尼文・泰文・菲律賓語</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico ico-org">🏦</div>
+      <div class="feat-title" id="f4-t">正規合法</div>
+      <div class="feat-desc" id="f4-d">玉山銀行金管局核准，受法律保障</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico ico-grn">💳</div>
+      <div class="feat-title" id="f5-t">帳戶直入</div>
+      <div class="feat-desc" id="f5-d">撥款進入全盈+PAY，可直接匯款回家</div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-ico ico-amb">📱</div>
+      <div class="feat-title" id="f6-t">全程線上</div>
+      <div class="feat-desc" id="f6-d">不需跑銀行，手機拍照即完成申請</div>
+    </div>
+  </div>
+</div>
+
+<!-- Calculator card -->
+<div class="card">
+  <div class="card-lbl" id="t-amt-lbl">💰 借款金額</div>
+  <div class="amt-wrap">
+    <div class="amt-ntd" id="t-ntd">新台幣</div>
+    <div class="amt-num" id="amt-disp">60,000</div>
+    <div class="amt-home" id="amt-home">≈ 46,284,000 VND</div>
+  </div>
+  <input type="range" id="sl-amt" min="30000" max="100000" step="5000" value="60000" oninput="calc()">
+  <div class="rl"><span>NT$30,000</span><span>NT$100,000</span></div>
+
+  <div class="sl-row">
+    <span class="sl-title" id="t-rate-lbl">參考年利率</span>
+    <span class="sl-val" id="rate-disp">13.00%</span>
+  </div>
+  <input type="range" id="sl-rate" min="10" max="16" step="0.5" value="13" oninput="calc()">
+  <div class="rl"><span>10%</span><span id="t-rate-note">實際利率以審核為準</span><span>16%</span></div>
+
+  <div class="sl-row" style="margin-bottom:7px;">
+    <span class="sl-title" id="t-period-lbl">還款期數</span>
+  </div>
+  <div class="per-grid">
+    <button class="per-btn" onclick="setPer(3,this)">3<span class="ps" id="ps3">期</span></button>
+    <button class="per-btn act" onclick="setPer(6,this)">6<span class="ps" id="ps6">期</span></button>
+    <button class="per-btn" onclick="setPer(9,this)">9<span class="ps" id="ps9">期</span></button>
+  </div>
+</div>
+
+<!-- Monthly payment hero -->
+<div class="pay-hero" aria-live="polite">
+  <div class="ph-top">
+    <div class="ph-l">
+      <div class="ph-label" id="t-monthly-lbl">每月還款金額</div>
+      <div class="ph-amount" id="ph-amount">NT$10,892</div>
+      <div class="ph-home" id="ph-home">≈ 8,394,000 VND</div>
+      <div class="rate-badge">
+        <span class="rb-txt" id="t-rb-yr">年利率</span>
+        <span class="rb-val" id="rb-rate">13.00%</span>
+        <span class="rb-txt"> ・ </span>
+        <span class="rb-txt" id="t-rb-mo">月利率</span>
+        <span class="rb-val" id="rb-mrate">1.083%</span>
+      </div>
+    </div>
+    <div class="ph-r">
+      <div class="ratio-tag rt-ok" id="rtag">佔月薪 34%</div>
+    </div>
+  </div>
+  <div class="ph-strip">
+    <div class="ph-s-item">
+      <div class="ph-s-lbl" id="t-s-int">本期利息</div>
+      <div class="ph-s-val hi" id="s-int">NT$650</div>
+    </div>
+    <div class="ph-s-item">
+      <div class="ph-s-lbl" id="t-s-pri">本期本金</div>
+      <div class="ph-s-val" id="s-pri">NT$10,242</div>
+    </div>
+    <div class="ph-s-item">
+      <div class="ph-s-lbl" id="t-s-rem">首期後餘額</div>
+      <div class="ph-s-val" id="s-rem">NT$49,758</div>
+    </div>
+  </div>
+</div>
+
+<!-- Schedule -->
+<button class="sched-btn" onclick="toggleSched()" id="sb-btn">
+  <span id="t-sched-btn">查看每月還款明細</span>
+  <span class="sched-arrow" id="sa">▼</span>
+</button>
+<div class="sched-tbl" id="sched-tbl">
+  <div class="st-h">
+    <span id="sh-n">期</span><span id="sh-p">月付金</span>
+    <span id="sh-pr">本金</span><span id="sh-i">利息</span><span id="sh-b">剩餘</span>
+  </div>
+  <div id="sched-body"></div>
+</div>
+<div class="disc" id="disc1">⚠️ 以上試算僅供參考，實際利率以玉山銀行審核核定為準。</div>
+
+</div><!-- /step1 -->
+
+<!-- ══ STEP 2 ══════════════════════════════════════════════════ -->
+<div id="step2" style="display:none;">
+<div class="card" style="background:var(--org-lt);border:1px solid var(--org-md);margin-bottom:10px;">
+  <div style="display:flex;align-items:center;gap:9px;">
+    <div style="font-size:26px;">📋</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--org);" id="pre-title">資格預審</div>
+      <div style="font-size:10px;color:var(--org-dk);" id="pre-sub">3 個問題・不影響信用紀錄・30 秒完成</div>
+    </div>
+  </div>
+</div>
+<div class="card">
+  <div class="q-lbl" id="q1-lbl">您在台灣工作多久了？</div>
+  <div class="q-sub" id="q1-sub">Bạn đã làm việc tại Đài Loan bao lâu?</div>
+  <div class="opt on" onclick="selOpt(this,'q1')"><div class="oc"></div><div><div class="ot" id="q1a1">3–6 個月</div><div class="os" id="q1a1s">符合申請資格</div></div></div>
+  <div class="opt" onclick="selOpt(this,'q1')"><div class="oc"></div><div><div class="ot" id="q1a2">6 個月–1 年</div><div class="os" id="q1a2s">符合申請資格</div></div></div>
+  <div class="opt" onclick="selOpt(this,'q1')"><div class="oc"></div><div><div class="ot" id="q1a3">1 年以上</div><div class="os" id="q1a3s">符合申請資格</div></div></div>
+  <div class="opt" onclick="selOpt(this,'q1')" style="border-color:var(--org-md);">
+    <div class="oc" style="border-color:var(--org-md);"></div>
+    <div><div class="ot" style="color:var(--sub);" id="q1a4">未滿 3 個月</div><div class="os" style="color:var(--org);" id="q1a4s">暫不符合條件</div></div>
+  </div>
+</div>
+<div class="card">
+  <div class="q-lbl" id="q2-lbl">您的每月薪資（含加班費）</div>
+  <div class="q-sub" id="q2-sub">Mức lương hàng tháng của bạn?</div>
+  <div class="opt" onclick="selOpt(this,'q2')"><div class="oc"></div><div><div class="ot" id="q2a1">NT$26,400 以下</div></div></div>
+  <div class="opt on" onclick="selOpt(this,'q2')"><div class="oc"></div><div><div class="ot" id="q2a2">NT$26,400–35,000</div><div class="os" id="q2a2s">符合本產品申請條件</div></div></div>
+  <div class="opt" onclick="selOpt(this,'q2')"><div class="oc"></div><div><div class="ot" id="q2a3">NT$35,000–50,000</div></div></div>
+  <div class="opt" onclick="selOpt(this,'q2')"><div class="oc"></div><div><div class="ot" id="q2a4">NT$50,000 以上</div></div></div>
+</div>
+<div class="card" style="margin-bottom:10px;">
+  <div class="q-lbl" id="q3-lbl">您目前的工作類型</div>
+  <div class="q-sub" id="q3-sub">Loại công việc?</div>
+  <div class="opt on" onclick="selOpt(this,'q3')"><div class="oc"></div><div class="ot" id="q3a1">製造業 / 工廠</div></div>
+  <div class="opt" onclick="selOpt(this,'q3')"><div class="oc"></div><div class="ot" id="q3a2">看護 / 照護</div></div>
+  <div class="opt" onclick="selOpt(this,'q3')"><div class="oc"></div><div class="ot" id="q3a3">漁業</div></div>
+  <div class="opt" onclick="selOpt(this,'q3')" style="margin-bottom:0;"><div class="oc"></div><div class="ot" id="q3a4">其他</div></div>
+</div>
+<div class="disc" id="disc2">ℹ️ 預審資料不影響您的信用評分，僅用於初步評估，不會傳送給任何機構。</div>
+</div>
+
+<!-- ══ STEP 3 ══════════════════════════════════════════════════ -->
+<div id="step3" style="display:none;">
+<div class="consent-hero">
+  <div class="ch-tag" id="ct-tag">法律授權文件</div>
+  <div class="ch-title" id="ct-title">個人資料使用同意書</div>
+  <div class="ch-sub" id="ct-sub">申請貸款前，請確認以下資料授權範圍。</div>
+</div>
+<div class="data-list">
+  <div class="dl-title" id="dl-title">📤 將傳送給玉山銀行的資料</div>
+  <div class="dl-item"><div class="dl-dot"></div><div class="dl-text" id="dl1">基本身分資料（姓名、居留證號、國籍）<span class="dl-tag" style="background:#FDE8E8;color:var(--red);">必要</span></div></div>
+  <div class="dl-item"><div class="dl-dot"></div><div class="dl-text" id="dl2">在台工作時間與薪資資訊<span class="dl-tag" style="background:#FDE8E8;color:var(--red);">必要</span></div></div>
+  <div class="dl-item"><div class="dl-dot"></div><div class="dl-text" id="dl3">本平台帳戶消費行為紀錄（近 6 個月）<span class="dl-tag" style="background:#FDE8E8;color:var(--red);">必要</span></div></div>
+  <div class="dl-item"><div class="dl-dot"></div><div class="dl-text" id="dl4">帳戶餘額與匯款往來紀錄<span class="dl-tag" style="background:#FDE8E8;color:var(--red);">必要</span></div></div>
+  <div class="dl-item"><div class="dl-dot"></div><div class="dl-text" id="dl5">聯絡電話<span class="dl-tag" style="background:var(--grn-lt);color:var(--grn-dk);">選填</span></div></div>
+</div>
+<div class="purpose-box">
+  <div class="pb-title" id="pb-title">📋 資料使用目的</div>
+  <div class="pb-row"><div class="pb-ico">🔍</div><div class="pb-txt" id="pb1">信用審核與貸款資格評估</div></div>
+  <div class="pb-row"><div class="pb-ico">📊</div><div class="pb-txt" id="pb2">核貸條件（利率、額度）之決定</div></div>
+  <div class="pb-row"><div class="pb-ico">🚫</div><div class="pb-txt" id="pb3">不會用於行銷或轉售給其他第三方</div></div>
+</div>
+<div class="third-box">
+  <div class="tb-title" id="tb-title">⚠️ 資料接收方</div>
+  <div class="tb-body" id="tb-body">您的個人資料將傳送至<strong>玉山商業銀行股份有限公司</strong>（金管局核准），依《個人資料保護法》負有保密義務，資料保存期限為 5 年。</div>
+</div>
+<div class="consent-checks">
+  <div class="ck-head" id="ck-head">請確認並勾選以下同意事項</div>
+  <div class="ck-item" onclick="toggleCk('ck1')">
+    <div class="ck-box" id="ck1"></div>
+    <div class="ck-text" id="ck1-txt">我同意將上述個人資料及消費紀錄提供給玉山銀行，用於本次信用貸款審核。<span class="ck-req">必填</span></div>
+  </div>
+  <div class="ck-item" onclick="toggleCk('ck2')">
+    <div class="ck-box" id="ck2"></div>
+    <div class="ck-text" id="ck2-txt">我確認年滿 20 歲，所提供資料均屬實。<span class="ck-req">必填</span></div>
+  </div>
+  <div class="ck-item" onclick="toggleCk('ck3')">
+    <div class="ck-box" id="ck3"></div>
+    <div class="ck-text" id="ck3-txt">我已閱讀並同意<span style="color:var(--navy);text-decoration:underline;">玉山銀行貸款條款</span>及<span style="color:var(--navy);text-decoration:underline;">個人資料保護聲明</span>。<span class="ck-req">必填</span></div>
+  </div>
+  <div class="ck-item" onclick="toggleCk('ck4')">
+    <div class="ck-box" id="ck4"></div>
+    <div class="ck-text" id="ck4-txt">我同意玉山銀行以電話或簡訊通知審核結果。<span class="ck-opt">選填</span></div>
+  </div>
+</div>
+<button class="all-ck-btn" onclick="checkAll()">✓ 全部同意</button>
+<div class="legal-note" id="legal-note">📌 依《個人資料保護法》第 8 條，您有權隨時要求查閱、更正或停止使用您的個人資料。本同意書簽署後，資料將以加密方式傳輸至玉山銀行。</div>
+</div>
+
+<!-- ══ STEP 4 ══════════════════════════════════════════════════ -->
+<div id="step4" style="display:none;">
+<div style="text-align:center;padding:16px 0 10px;">
+  <div class="hh-anim">🏦</div>
+  <div style="font-size:19px;font-weight:900;color:var(--txt);margin-bottom:5px;" id="hh-title">即將前往玉山銀行</div>
+  <div style="font-size:12px;color:var(--sub);line-height:1.6;" id="hh-sub">您的資料已通過初步審核<br>接下來進入玉山銀行的正式申請介面</div>
+</div>
+<div class="handoff-card">
+  <div class="hc-title" id="hc-title">您的申請摘要</div>
+  <div class="hc-row"><span class="hc-k" id="hk1">申請金額</span><span class="hc-v" style="color:var(--org-md);" id="hv1">NT$60,000</span></div>
+  <div class="hc-row"><span class="hc-k" id="hk2">還款期數</span><span class="hc-v" id="hv2">6 期</span></div>
+  <div class="hc-row"><span class="hc-k" id="hk3">預估月付金</span><span class="hc-v" style="color:var(--org-md);" id="hv3">NT$10,892</span></div>
+  <div class="hc-row"><span class="hc-k" id="hk4">資料授權</span><span class="hc-v" style="color:#9FE1CB;">✓ 已簽署同意</span></div>
+</div>
+<div class="transfer-info">
+  <div class="ti-title" id="ti-title">✅ 接下來的步驟</div>
+  <div class="ti-item"><div class="ti-n">1</div><div class="ti-t" id="ti1">進入玉山銀行介面，完成身分驗證（約 5 分鐘）</div></div>
+  <div class="ti-item"><div class="ti-n">2</div><div class="ti-t" id="ti2">上傳居留證正反面及最近 3 個月薪資單</div></div>
+  <div class="ti-item"><div class="ti-n">3</div><div class="ti-t" id="ti3">玉山銀行審核（約 2–3 個工作天）</div></div>
+  <div class="ti-item"><div class="ti-n">4</div><div class="ti-t" id="ti4">核准後撥款至您的全盈+PAY 帳戶</div></div>
+</div>
+<div class="safety-box">
+  <div class="sb-ico">🔒</div>
+  <div class="sb-txt"><span class="sb-bold">安全提示：</span>本次跳轉使用 TLS 加密。撥款直接入帳至<span class="sb-bold">全盈+PAY 帳戶</span>，每月還款自動扣款。</div>
+</div>
+<div class="disc" style="background:var(--org-lt);border-color:var(--org-md);color:var(--org-dk);" id="disc4">📞 如需協助請聯繫客服：0800-xxx-xxx（週一至週五 9:00–18:00）</div>
+</div>
+
+</div><!-- /scroll -->
+
+<div class="cta-bar">
+  <button class="cta" id="cta-btn" onclick="nextStep()">
+    <span id="cta-ico">📊</span><span id="cta-txt">確認試算，開始申請</span>
+  </button>
+  <div class="cta-note" id="cta-note">不影響信用紀錄</div>
+</div>
+
+</div><!-- /phone -->
+
+<script>
+const AVG_SAL=32000;
+let lang='zh', period=6, step=1, schedOpen=false;
+let ckState={ck1:false,ck2:false,ck3:false,ck4:false};
+
+const FEATS={
+  zh:[
+    {t:'不需保人',d:'無需台灣本地保人，在台工作即可申請'},
+    {t:'快速撥款',d:'審核通過最快 2 個工作天直接入帳'},
+    {t:'母語服務',d:'越南文・印尼文・泰文・菲律賓語'},
+    {t:'正規合法',d:'玉山銀行金管局核准，受法律保障'},
+    {t:'帳戶直入',d:'撥款進入全盈+PAY，可直接匯款回家'},
+    {t:'全程線上',d:'不需跑銀行，手機拍照即完成申請'},
+  ],
+  vi:[
+    {t:'Không cần bảo lãnh',d:'Không cần người bảo lãnh tại Đài Loan'},
+    {t:'Giải ngân nhanh',d:'Nhanh nhất 2 ngày làm việc sau khi duyệt'},
+    {t:'Ngôn ngữ mẹ đẻ',d:'Tiếng Việt · Indonesia · Thái · Filipino'},
+    {t:'Ngân hàng hợp pháp',d:'E.Sun Bank được FSC Đài Loan cấp phép'},
+    {t:'Tiền vào tài khoản',d:'Giải ngân thẳng vào tài khoản QPay'},
+    {t:'Hoàn toàn trực tuyến',d:'Không cần đến ngân hàng, chụp ảnh là xong'},
+  ],
+  id:[
+    {t:'Tanpa penjamin',d:'Tidak perlu penjamin lokal, cukup bekerja di Taiwan'},
+    {t:'Pencairan cepat',d:'Tercepat 2 hari kerja setelah persetujuan'},
+    {t:'Layanan bahasa',d:'Vietnam · Indonesia · Thai · Filipina'},
+    {t:'Bank resmi',d:'E.Sun Bank diizinkan oleh FSC Taiwan'},
+    {t:'Transfer langsung',d:'Dana langsung ke akun QPay Anda'},
+    {t:'Seluruhnya online',d:'Tidak perlu ke bank, foto KTP & slip gaji'},
+  ],
+  th:[
+    {t:'ไม่ต้องมีผู้ค้ำ',d:'ไม่ต้องมีผู้ค้ำประกันในไต้หวัน'},
+    {t:'โอนเงินเร็ว',d:'เร็วที่สุด 2 วันทำการหลังอนุมัติ'},
+    {t:'บริการภาษา',d:'เวียดนาม · อินโดนีเซีย · ไทย · ฟิลิปปินส์'},
+    {t:'ถูกกฎหมาย',d:'E.Sun Bank ได้รับอนุญาตจาก FSC ไต้หวัน'},
+    {t:'โอนเข้าบัญชี',d:'เงินเข้าบัญชี QPay โดยตรง'},
+    {t:'ออนไลน์ทั้งหมด',d:'ไม่ต้องไปธนาคาร ถ่ายรูปเอกสารได้เลย'},
+  ],
+  fil:[
+    {t:'Walang guarantor',d:'Hindi kailangan ng lokal na guarantor sa Taiwan'},
+    {t:'Mabilis na disbursement',d:'Pinakamabilis na 2 araw pagkatapos ng pag-apruba'},
+    {t:'Serbisyo sa wika',d:'Vietnamese · Indonesian · Thai · Filipino'},
+    {t:'Opisyal na bangko',d:'E.Sun Bank lisensyado ng FSC ng Taiwan'},
+    {t:'Diretso sa account',d:'Ang pondo ay pumunta diretso sa QPay account'},
+    {t:'Buong online',d:'Hindi kailangang pumunta sa bangko, mag-litrato lang'},
+  ],
+  en:[
+    {t:'No guarantor',d:'No local guarantor required, just work in Taiwan'},
+    {t:'Fast disbursement',d:'As fast as 2 working days after approval'},
+    {t:'Native language',d:'Vietnamese · Indonesian · Thai · Filipino'},
+    {t:'Licensed bank',d:'E.Sun Bank licensed by Taiwan FSC'},
+    {t:'Direct deposit',d:'Funds deposited directly to your QPay account'},
+    {t:'Fully online',d:'No bank visit needed, just upload photos'},
+  ],
+};
+
+const L={
+  zh:{navTitles:['信用貸款試算','資格預審','資料授權同意','前往玉山銀行'],steps:['試算','預審','授權','申請'],bTag:'玉山銀行合作',bTitle:'在台工作就能申請貸款',bSub:'不需本地保人・額度 NT$30,000–100,000',featTitle:'✨ 服務特色',amtLbl:'💰 借款金額',ntd:'新台幣',rateLbl:'參考年利率',rateNote:'實際利率以審核為準',perLbl:'還款期數',pSub:'期',monthlyLbl:'每月還款金額',sInt:'本期利息',sPri:'本期本金',sRem:'首期後餘額',rbYr:'年利率',rbMo:'月利率',ratioOk:'佔月薪 %n%',ratioWarn:'佔月薪 %n%・稍高',ratioBad:'佔月薪 %n%・過重',schedBtn:'查看每月還款明細',schedClose:'收起明細',shN:'期',shP:'月付金',shPr:'本金',shI:'利息',shB:'剩餘',disc1:'⚠️ 以上試算僅供參考，實際利率以玉山銀行審核核定為準。',ctaTxts:['確認試算，開始申請','確認資料，查看條款','同意並前往玉山銀行','前往玉山銀行正式申請 →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['不影響信用紀錄','資料僅供初步評估','資料將以加密方式傳輸','將開啟玉山銀行介面'],fx:1,hf:(n)=>'NT$'+n0(n)},
+  vi:{navTitles:['Tính lãi vay','Kiểm tra điều kiện','Đồng ý chia sẻ dữ liệu','Chuyển đến E.Sun Bank'],steps:['Tính','Xét duyệt','Đồng ý','Nộp đơn'],bTag:'Hợp tác E.Sun Bank',bTitle:'Làm việc tại Đài Loan là có thể vay',bSub:'Không cần bảo lãnh・NT$30,000–100,000',featTitle:'✨ Tính năng dịch vụ',amtLbl:'💰 Số tiền vay',ntd:'Đài tệ (NT$)',rateLbl:'Lãi suất năm tham khảo',rateNote:'Lãi suất thực tế theo duyệt',perLbl:'Kỳ hạn trả nợ',pSub:'tháng',monthlyLbl:'Tiền trả mỗi tháng',sInt:'Lãi kỳ đầu',sPri:'Gốc kỳ đầu',sRem:'Dư nợ sau kỳ 1',rbYr:'Lãi suất năm',rbMo:'Lãi suất tháng',ratioOk:'%n% lương—ổn',ratioWarn:'%n% lương—khá cao',ratioBad:'%n% lương—quá cao',schedBtn:'Xem chi tiết từng tháng',schedClose:'Đóng bảng',shN:'Kỳ',shP:'Trả/tháng',shPr:'Gốc',shI:'Lãi',shB:'Còn lại',disc1:'⚠️ Số liệu chỉ tham khảo. Lãi suất thực tế do E.Sun Bank quyết định.',ctaTxts:['Xác nhận, bắt đầu đăng ký','Xác nhận, xem điều khoản','Đồng ý & chuyển đến E.Sun Bank','Đến giao diện E.Sun Bank →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['Không ảnh hưởng tín dụng','Chỉ dùng để đánh giá sơ bộ','Dữ liệu được mã hóa','Sẽ mở giao diện E.Sun Bank'],fx:771,hf:(n)=>'≈ '+n0(n*771)+' VND'},
+  id:{navTitles:['Simulasi Pinjaman','Pra-seleksi','Persetujuan Data','Ke E.Sun Bank'],steps:['Simulasi','Seleksi','Setuju','Ajukan'],bTag:'Kerjasama E.Sun Bank',bTitle:'Bekerja di Taiwan bisa pinjam',bSub:'Tanpa penjamin・NT$30,000–100,000',featTitle:'✨ Fitur layanan',amtLbl:'💰 Jumlah pinjaman',ntd:'Dolar Taiwan (NT$)',rateLbl:'Suku bunga referensi',rateNote:'Suku bunga aktual per persetujuan',perLbl:'Jangka waktu cicilan',pSub:'bln',monthlyLbl:'Cicilan per bulan',sInt:'Bunga cicilan 1',sPri:'Pokok cicilan 1',sRem:'Sisa setelah cicilan 1',rbYr:'Bunga/tahun',rbMo:'Bunga/bulan',ratioOk:'%n% gaji—aman',ratioWarn:'%n% gaji—agak tinggi',ratioBad:'%n% gaji—terlalu tinggi',schedBtn:'Lihat rincian per bulan',schedClose:'Tutup rincian',shN:'Bln',shP:'Cicilan',shPr:'Pokok',shI:'Bunga',shB:'Sisa',disc1:'⚠️ Angka hanya perkiraan. Suku bunga aktual ditentukan E.Sun Bank.',ctaTxts:['Konfirmasi, mulai daftar','Konfirmasi, lihat syarat','Setuju & ke E.Sun Bank','Ke antarmuka E.Sun Bank →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['Tidak mempengaruhi kredit','Hanya untuk penilaian awal','Data dienkripsi','Akan membuka antarmuka E.Sun Bank'],fx:210,hf:(n)=>'≈ Rp '+n0(n*210)},
+  th:{navTitles:['คำนวณสินเชื่อ','ตรวจสอบคุณสมบัติ','ยินยอมข้อมูล','ไปที่ E.Sun Bank'],steps:['คำนวณ','ตรวจสอบ','ยินยอม','ยื่นขอ'],bTag:'ร่วมกับ E.Sun Bank',bTitle:'ทำงานในไต้หวันก็กู้ได้',bSub:'ไม่ต้องมีผู้ค้ำประกัน・NT$30,000–100,000',featTitle:'✨ คุณสมบัติบริการ',amtLbl:'💰 จำนวนเงินกู้',ntd:'เงินดอลลาร์ไต้หวัน',rateLbl:'อัตราดอกเบี้ยอ้างอิง',rateNote:'อัตราจริงขึ้นอยู่กับการอนุมัติ',perLbl:'ระยะเวลาผ่อน',pSub:'เดือน',monthlyLbl:'ยอดผ่อนต่อเดือน',sInt:'ดอกเบี้ยงวดแรก',sPri:'เงินต้นงวดแรก',sRem:'ยอดคงเหลือหลังงวด 1',rbYr:'ดอกเบี้ย/ปี',rbMo:'ดอกเบี้ย/เดือน',ratioOk:'%n% ของเงินเดือน—ปลอดภัย',ratioWarn:'%n% ของเงินเดือน—ค่อนข้างสูง',ratioBad:'%n% ของเงินเดือน—สูงเกินไป',schedBtn:'ดูรายละเอียดรายเดือน',schedClose:'ปิดตาราง',shN:'งวด',shP:'ยอดผ่อน',shPr:'เงินต้น',shI:'ดอกเบี้ย',shB:'คงเหลือ',disc1:'⚠️ ตัวเลขเป็นเพียงการประมาณการ อัตราดอกเบี้ยจริงขึ้นอยู่กับ E.Sun Bank',ctaTxts:['ยืนยัน เริ่มสมัคร','ยืนยัน ดูข้อกำหนด','ยินยอม & ไปที่ E.Sun Bank','ไปที่ E.Sun Bank →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['ไม่กระทบคะแนนเครดิต','ใช้สำหรับการประเมินเบื้องต้น','ข้อมูลถูกเข้ารหัส','จะเปิดหน้าต่าง E.Sun Bank'],fx:1.16,hf:(n)=>'≈ ฿'+n0(n*1.16)},
+  fil:{navTitles:['Kalkulasyon ng Pautang','Pre-screening','Pahintulot sa Data','Pumunta sa E.Sun Bank'],steps:['Kalkulahin','Suriin','Payagan','Mag-apply'],bTag:'Kasosyo ng E.Sun Bank',bTitle:'Magtrabaho sa Taiwan, pwede nang mangutang',bSub:'Walang guarantor・NT$30,000–100,000',featTitle:'✨ Mga katangian ng serbisyo',amtLbl:'💰 Halaga ng pautang',ntd:'Taiwan Dollar (NT$)',rateLbl:'Sangguniang rate',rateNote:'Aktwal na rate ayon sa pag-apruba',perLbl:'Tagal ng pagbabayad',pSub:'buwan',monthlyLbl:'Buwanang bayad',sInt:'Interes (Buwan 1)',sPri:'Puhunan (Buwan 1)',sRem:'Balanse pagkatapos ng Buwan 1',rbYr:'Rate/taon',rbMo:'Rate/buwan',ratioOk:'%n% ng suweldo—ligtas',ratioWarn:'%n% ng suweldo—medyo mataas',ratioBad:'%n% ng suweldo—napakataas',schedBtn:'Tingnan ang buwanang detalye',schedClose:'Isara ang talahanayan',shN:'Buwan',shP:'Bayad',shPr:'Puhunan',shI:'Interes',shB:'Natitira',disc1:'⚠️ Ang mga numero ay para sa sanggunian lamang. Ang aktwal na rate ay tinutukoy ng E.Sun Bank.',ctaTxts:['Kumpirmahin, simulan ang pag-apply','Kumpirmahin, tingnan ang mga tuntunin','Sumang-ayon & pumunta sa E.Sun Bank','Pumunta sa E.Sun Bank →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['Hindi nakakaapekto sa credit','Para sa paunang pagtatasa lamang','Ang data ay naka-encrypt','Magbubukas ng window ng E.Sun Bank'],fx:1.12,hf:(n)=>'≈ ₱'+n0(n*1.12)},
+  en:{navTitles:['Loan Calculator','Pre-screening','Data Consent','Go to E.Sun Bank'],steps:['Calculate','Screening','Consent','Apply'],bTag:'E.Sun Bank Partner',bTitle:'Work in Taiwan? You can apply for a loan',bSub:'No local guarantor・NT$30,000–100,000',featTitle:'✨ Service Features',amtLbl:'💰 Loan amount',ntd:'New Taiwan Dollar (NT$)',rateLbl:'Reference annual rate',rateNote:'Actual rate subject to approval',perLbl:'Repayment period',pSub:'mo',monthlyLbl:'Monthly payment',sInt:'Month 1 interest',sPri:'Month 1 principal',sRem:'Balance after Month 1',rbYr:'Annual rate',rbMo:'Monthly rate',ratioOk:'%n% of salary—safe',ratioWarn:'%n% of salary—high',ratioBad:'%n% of salary—too high',schedBtn:'View monthly schedule',schedClose:'Close schedule',shN:'Mo.',shP:'Payment',shPr:'Principal',shI:'Interest',shB:'Balance',disc1:'⚠️ Figures are for reference only. Actual rate is determined by E.Sun Bank.',ctaTxts:['Confirm estimate, start applying','Confirm, view terms','Agree & go to E.Sun Bank','Go to E.Sun Bank →'],ctaIcos:['📊','✅','🔐','🏦'],ctaNotes:['Does not affect credit score','Data for preliminary assessment only','Data will be encrypted','E.Sun Bank interface will open'],fx:1,hf:(n)=>'NT$'+n0(n)},
+};
+
+function n0(v){return Math.round(v).toLocaleString();}
+function fNT(v){return'NT$'+n0(v);}
+function s(id,v){const e=document.getElementById(id);if(e)e.textContent=v;}
+
+function renderStepBar(){
+  const d=L[lang];let h='';
+  for(let i=1;i<=4;i++){
+    const st=i<step?'done':i===step?'active':'pending';
+    const ll=i<step?'done':'pending';
+    h+=`<div class="step-node"><div class="step-c ${st}">${i<step?'✓':i}</div><div class="step-lbl${st==='active'?' active':''}">${d.steps[i-1]}</div></div>`;
+    if(i<4)h+=`<div class="step-line ${ll}"></div>`;
+  }
+  document.getElementById('step-bar').innerHTML=h;
+}
+
+function renderFeats(){
+  const feats=FEATS[lang]||FEATS.zh;
+  const ids=['f1','f2','f3','f4','f5','f6'];
+  ids.forEach((id,i)=>{
+    s(id+'-t',feats[i].t);
+    s(id+'-d',feats[i].d);
+  });
+}
+
+function setLang(l){
+  lang=l;
+  document.querySelectorAll('.lp').forEach(b=>b.classList.remove('act'));
+  document.getElementById('l-'+l).classList.add('act');
+  applyLang();calc();
+}
+
+function applyLang(){
+  const d=L[lang];
+  s('nav-title',d.navTitles[step-1]);
+  renderStepBar();
+  s('b-tag',d.bTag);s('b-title',d.bTitle);s('b-sub',d.bSub);
+  s('feat-title',d.featTitle);
+  renderFeats();
+  s('t-amt-lbl',d.amtLbl);s('t-ntd',d.ntd);
+  s('t-rate-lbl',d.rateLbl);s('t-rate-note',d.rateNote);
+  s('t-period-lbl',d.perLbl);
+  ['ps3','ps6','ps9'].forEach(id=>s(id,d.pSub));
+  s('t-monthly-lbl',d.monthlyLbl);
+  s('t-s-int',d.sInt);s('t-s-pri',d.sPri);s('t-s-rem',d.sRem);
+  s('t-rb-yr',d.rbYr);s('t-rb-mo',d.rbMo);
+  s('sh-n',d.shN);s('sh-p',d.shP);s('sh-pr',d.shPr);s('sh-i',d.shI);s('sh-b',d.shB);
+  s('disc1',d.disc1);
+  const so=document.getElementById('sched-tbl').classList.contains('open');
+  s('t-sched-btn',so?d.schedClose:d.schedBtn);
+  updateCta();
+}
+
+function calc(){
+  const d=L[lang];
+  const amt=parseInt(document.getElementById('sl-amt').value);
+  const ar=parseFloat(document.getElementById('sl-rate').value)/100;
+  const r=ar/12,n=period;
+  const mo=amt*(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1);
+  const int1=amt*r,pri1=mo-int1,rem1=amt-pri1;
+  const ratio=Math.round(mo/AVG_SAL*100);
+  s('amt-disp',n0(amt));
+  document.getElementById('amt-home').textContent=d.hf(amt);
+  s('rate-disp',(parseFloat(document.getElementById('sl-rate').value)).toFixed(2)+'%');
+  s('rb-rate',(parseFloat(document.getElementById('sl-rate').value)).toFixed(2)+'%');
+  s('rb-mrate',(ar/12*100).toFixed(3)+'%');
+  s('ph-amount',fNT(mo));
+  document.getElementById('ph-home').textContent=d.hf(mo);
+  s('s-int',fNT(int1));s('s-pri',fNT(pri1));s('s-rem',fNT(rem1));
+  const tag=document.getElementById('rtag');
+  const key=ratio>33?'ratioBad':ratio>25?'ratioWarn':'ratioOk';
+  tag.textContent=d[key].replace('%n',ratio);
+  tag.className='ratio-tag '+(ratio>33?'rt-bad':ratio>25?'rt-warn':'rt-ok');
+  s('hv1',fNT(amt));s('hv2',period+' '+d.pSub);s('hv3',fNT(mo));
+  buildSched(amt,mo,r,n);
+  updSlider('sl-amt',30000,100000);
+  updSlider('sl-rate',10,16);
+}
+
+function buildSched(p,mo,r,n){
+  let b=p,rows='';
+  for(let i=1;i<=n;i++){
+    const int=b*r,pr=mo-int;b=Math.max(0,b-pr);
+    rows+=`<div class="st-r"><span class="st-n">${i}</span><span>${fNT(mo)}</span><span>${fNT(pr)}</span><span>${fNT(int)}</span><span>${i===n?'NT$0':fNT(b)}</span></div>`;
+  }
+  document.getElementById('sched-body').innerHTML=rows;
+}
+
+function setPer(p,el){
+  period=p;document.querySelectorAll('.per-btn').forEach(b=>b.classList.remove('act'));
+  el.classList.add('act');calc();
+}
+
+function toggleSched(){
+  schedOpen=!schedOpen;
+  document.getElementById('sched-tbl').classList.toggle('open',schedOpen);
+  document.getElementById('sa').style.transform=schedOpen?'rotate(180deg)':'';
+  s('t-sched-btn',schedOpen?L[lang].schedClose:L[lang].schedBtn);
+}
+
+function updSlider(id,mn,mx){
+  const sl=document.getElementById(id);if(!sl)return;
+  const p=Math.round((parseFloat(sl.value)-mn)/(mx-mn)*100);
+  sl.style.background=`linear-gradient(to right,var(--org) 0%,var(--org) ${p}%,var(--bdr) ${p}%,var(--bdr) 100%)`;
+}
+
+function selOpt(el,group){
+  el.closest('[id^=step]').querySelectorAll(`.opt[onclick*="'${group}'"]`).forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+}
+
+function toggleCk(id){
+  ckState[id]=!ckState[id];
+  document.getElementById(id).classList.toggle('checked',ckState[id]);
+  updateCta();
+}
+function checkAll(){
+  ['ck1','ck2','ck3','ck4'].forEach(id=>{ckState[id]=true;document.getElementById(id).classList.add('checked');});
+  updateCta();
+}
+function reqOk(){return ckState.ck1&&ckState.ck2&&ckState.ck3;}
+
+function nextStep(){
+  if(step===4){alert('正在跳轉至玉山銀行介面…');return;}
+  if(step===3&&!reqOk()){alert({'zh':'請確認勾選所有必填項目','vi':'Vui lòng đồng ý tất cả các mục bắt buộc','id':'Harap centang semua item wajib','th':'กรุณาทำเครื่องหมายในช่องที่จำเป็น','fil':'Mangyaring lagyan ng tsek ang lahat ng kinakailangan','en':'Please check all required items'}[lang]);return;}
+  step++;showStep(step);
+}
+function goBack(){
+  if(step===1){alert('返回首頁');return;}
+  step--;showStep(step);
+}
+function showStep(n){
+  [1,2,3,4].forEach(i=>document.getElementById('step'+i).style.display=i===n?'block':'none');
+  document.getElementById('main-scroll').scrollTop=0;
+  s('nav-title',L[lang].navTitles[n-1]);
+  renderStepBar();updateCta();
+}
+function updateCta(){
+  const d=L[lang];
+  const btn=document.getElementById('cta-btn');
+  s('cta-ico',d.ctaIcos[step-1]);s('cta-txt',d.ctaTxts[step-1]);s('cta-note',d.ctaNotes[step-1]);
+  btn.disabled=(step===3&&!reqOk());
+}
+setLang('zh');showStep(1);
+</script>
+</body>
+</html>
