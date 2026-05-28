@@ -2,7 +2,7 @@
   "routes": [
     {
       "src": "/",
-      "dest": "/brand_loan_flow_prototype.html"
+      "dest": "/loan-flow-v4.html"
     }
   ]
 }
